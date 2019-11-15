@@ -1,0 +1,23 @@
+{
+  "name": "blog-post-node",
+  "version": "1.0.0",
+  "description": "Blog Post API - NodeJS",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leandrocodes/blog-post-node.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leandrocodes/blog-post-node/issues"
+  },
+  "homepage": "https://github.com/leandrocodes/blog-post-node#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^1.19.4"
+  }
+}
