@@ -11,7 +11,7 @@ const main = express()
 
 app.use((req, res, next) => {
   const apiKey = req.get('API-Key')
-  if (!apiKey || apiKey !== process.env.apiKey) {
+  if (!apiKey || apiKey !== '123') {
     res.status(401).json({ error: 'unauthorised' })
   } else {
     next()
@@ -21,7 +21,7 @@ app.use((req, res, next) => {
 main.use('/api/v1', app)
 main.use(bodyParser.json())
 
-exports.webApi = functions.https.onRequest(main)
+exports.dev = functions.https.onRequest(main)
 
 app.get('/warmup', (req, res) => {
   res.send('Warming up friend.')
@@ -69,5 +69,11 @@ app.get('/products', async (req, res) => {
 
   } catch (err) {
     res.status(500).send(err)
+  }
+})
+
+app.get('/products:id', async (req, res) => {
+  try {
+    
   }
 })
