@@ -72,8 +72,23 @@ app.get('/products', async (req, res) => {
   }
 })
 
-app.get('/products:id', async (req, res) => {
+app.get('/products/:id', async (req, res) => {
   try {
-    
+    const productId = req.params.id
+
+    if (!productId) throw new Error('ID is required')
+
+    const product = await db.collection('products').doc(productId).get()
+
+    if(!product.exists){
+      throw new Error(`Product doesn't exist.`)
+    } else {
+      res.json({
+        id: product.id,
+        data: product.data()
+      })
+    }
+  } catch (err) {
+    res.status(500).send(err)
   }
 })
