@@ -1,5 +1,9 @@
 const express = require('express')
 
+const firebase = require('firebase/app')
+require('firebase/auth')
+require('firebase/database')
+
 const app = express()
 
 app.get('/', (req, res) => {
