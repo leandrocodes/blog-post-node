@@ -92,3 +92,27 @@ app.get('/products/:id', async (req, res) => {
     res.status(500).send(err)
   }
 })
+
+app.put('/products/:id', async (req, res) => {
+  try {
+    const productId = req.params.id
+    const title = req.body.title
+
+    if(!productId) throw new Error('ID is required')
+    if(!title) throw new Error('Title is required')
+
+    const data = {
+      title
+    }
+
+    const productsRef = await db.collection('products')
+      .doc(productId).set(data, {merge: true})
+
+    res.json({
+      id: productId,
+      data
+    })
+  } catch (err) {
+    res.sendStatus(500).send(err)
+  }
+})
