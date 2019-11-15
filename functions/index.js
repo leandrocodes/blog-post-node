@@ -116,3 +116,32 @@ app.put('/products/:id', async (req, res) => {
     res.sendStatus(500).send(err)
   }
 })
+
+app.patch('/products/:id', async(req, res) => {
+  try{
+    const productId = req.params.id
+
+    const body = req.body
+    
+    const data = {
+      body
+    }
+
+    if(!productId) throw new Error('ID is required')
+
+    const product = await db.collection('products').doc(productId).get()
+    if(productId.exists){
+      product.update(data)
+      
+      res.json({
+        id: product.id,
+        data: product.data()
+      })
+    
+    } else {
+      throw new Error('Product doesnt exist')
+    }
+  } catch(err){
+    res.sendStatus(500).send(err)
+  }
+})
