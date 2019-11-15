@@ -21,7 +21,7 @@ app.use((req, res, next) => {
 main.use('/api/v1', app)
 main.use(bodyParser.json())
 
-exports.dev = functions.https.onRequest(main)
+exports.webApi = functions.https.onRequest(main)
 
 app.get('/warmup', (req, res) => {
   res.send('Warming up friend.')
