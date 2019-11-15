@@ -1,7 +1,7 @@
-import * as functions from 'firebase-functions'
-import * as admin from 'firebase-admin'
-import * as express from 'express'
-import * as bodyParser from "body-parser"
+const functions = require('firebase-functions')
+const admin = require('firebase-admin')
+const express = require('express')
+const bodyParser = require('body-parser')
 
 admin.initializeApp(functions.config().firebase)
 const db = admin.firestore()
@@ -21,7 +21,7 @@ app.use((req, res, next) => {
 main.use('/api/v1', app)
 main.use(bodyParser.json())
 
-export const dev = functions.https.onRequest(main)
+exports.dev = functions.https.onRequest(main)
 
 app.get('/warmup', (req, res) => {
   res.send('Warming up friend.')
@@ -46,6 +46,26 @@ app.post('/products', async (req, res) => {
       id: productsRef.id,
       data: product.data()
     })
+
+  } catch (err) {
+    res.status(500).send(err)
+  }
+})
+
+app.get('/products', async (req, res) => {
+  try {
+
+    const productRef = await db.collection('products').get()
+    const products = []
+
+    productRef.forEach(doc => {
+      products.push({
+        id: doc.id,
+        data: doc.data()
+      })
+    })
+
+    res.json(products)
 
   } catch (err) {
     res.status(500).send(err)
