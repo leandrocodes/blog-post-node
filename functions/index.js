@@ -11,7 +11,7 @@ const main = express()
 
 app.use((req, res, next) => {
   const apiKey = req.get('API-Key')
-  if (!apiKey || apiKey !== '123') {
+  if (!apiKey || apiKey !== process.env.apiKey) {
     res.status(401).json({ error: 'unauthorised' })
   } else {
     next()
