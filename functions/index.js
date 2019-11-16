@@ -93,30 +93,6 @@ app.get('/products/:id', async (req, res) => {
   }
 })
 
-/* app.put('/products/:id', async (req, res) => {
-  try {
-    const productId = req.params.id
-    const body = req.body
-
-    if(!productId) throw new Error('ID is required')
-    if(!title) throw new Error('Title is required')
-
-    const data = {
-      body
-    }
-
-    const productsRef = await db.collection('products')
-      .doc(productId).set(data, {merge: true})
-
-    res.json({
-      id: productId,
-      data
-    })
-  } catch (err) {
-    res.sendStatus(500).send(err)
-  }
-}) */
-
 app.patch('/products/:id', async (req, res) => {
   try {
 
@@ -125,8 +101,6 @@ app.patch('/products/:id', async (req, res) => {
 
     const data = req.body
     if (!data) throw new Error('Data is needed')
-
-    //const productsRef = await db.collection('products').doc(productId).update(data)
 
     const product = await db.collection('products').doc(productId).get()
     if (!product.exists) {
@@ -137,6 +111,28 @@ app.patch('/products/:id', async (req, res) => {
       res.json({
         id: productId,
         data: product.data()
+      })
+    }
+  } catch (err) {
+    res.sendStatus(500).send(err)
+  }
+})
+
+
+app.delete('/products/:id', async (req, res) => {
+  try {
+
+    const productId = req.params.id
+    if (!productId) throw new Error('ID is required')
+
+    const product = await db.collection('products').doc(productId).get()
+    if (!product.exists) {
+      throw new Error('Product not exists')
+    } else {
+      db.collection('products').doc(productId).delete()
+
+      res.json({
+        id: productId
       })
     }
   } catch (err) {
