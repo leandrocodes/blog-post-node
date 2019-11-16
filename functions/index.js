@@ -93,16 +93,16 @@ app.get('/products/:id', async (req, res) => {
   }
 })
 
-app.put('/products/:id', async (req, res) => {
+/* app.put('/products/:id', async (req, res) => {
   try {
     const productId = req.params.id
-    const title = req.body.title
+    const body = req.body
 
     if(!productId) throw new Error('ID is required')
     if(!title) throw new Error('Title is required')
 
     const data = {
-      title
+      body
     }
 
     const productsRef = await db.collection('products')
@@ -115,32 +115,27 @@ app.put('/products/:id', async (req, res) => {
   } catch (err) {
     res.sendStatus(500).send(err)
   }
-})
+}) */
 
 app.patch('/products/:id', async(req, res) => {
   try{
     const productId = req.params.id
+    const { name, brand, price, quantity } = req.body
 
-    const body = req.body
-    
     const data = {
-      body
+      name,
+      brand,
+      price,
+      quantity
     }
 
-    if(!productId) throw new Error('ID is required')
+    const productsRef = await db.collection('products').doc(productId).update(data)
 
-    const product = await db.collection('products').doc(productId).get()
-    if(productId.exists){
-      product.update(data)
-      
-      res.json({
-        id: product.id,
-        data: product.data()
-      })
-    
-    } else {
-      throw new Error('Product doesnt exist')
-    }
+    res.json({
+      id: productId,
+      data
+    })
+
   } catch(err){
     res.sendStatus(500).send(err)
   }
