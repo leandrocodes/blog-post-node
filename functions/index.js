@@ -80,7 +80,7 @@ app.get('/products/:id', async (req, res) => {
 
     const product = await db.collection('products').doc(productId).get()
 
-    if(!product.exists){
+    if (!product.exists) {
       throw new Error(`Product doesn't exist.`)
     } else {
       res.json({
@@ -117,26 +117,29 @@ app.get('/products/:id', async (req, res) => {
   }
 }) */
 
-app.patch('/products/:id', async(req, res) => {
-  try{
+app.patch('/products/:id', async (req, res) => {
+  try {
+
     const productId = req.params.id
-    const { name, brand, price, quantity } = req.body
+    if (!productId) throw new Error('ID is required')
 
-    const data = {
-      name,
-      brand,
-      price,
-      quantity
+    const data = req.body
+    if (!data) throw new Error('Data is needed')
+
+    //const productsRef = await db.collection('products').doc(productId).update(data)
+
+    const product = await db.collection('products').doc(productId).get()
+    if (!product.exists) {
+      throw new Error('Product not exists')
+    } else {
+      db.collection('products').doc(productId).update(data)
+
+      res.json({
+        id: productId,
+        data: product.data()
+      })
     }
-
-    const productsRef = await db.collection('products').doc(productId).update(data)
-
-    res.json({
-      id: productId,
-      data
-    })
-
-  } catch(err){
+  } catch (err) {
     res.sendStatus(500).send(err)
   }
 })
