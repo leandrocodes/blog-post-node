@@ -3,7 +3,6 @@ const cors = require('cors')
 const functions = require('firebase-functions')
 const bodyParser = require('body-parser')
 
-const firebase = require('./firebase')
 const routes = require('./routes')
 
 const app = express()
@@ -21,9 +20,9 @@ app.use((req, res, next) => {
   }
 })
 
-main.use('/api/v1', app)
+main.use('/v1', app)
 main.use(bodyParser.json())
 /* app.use(firebase)  */
 
 
-exports.tests = functions.https.onRequest(main)
+exports.api = functions.https.onRequest(main)
