@@ -3,13 +3,11 @@ const cors = require('cors')
 const functions = require('firebase-functions')
 const bodyParser = require('body-parser')
 
-const routes = require('./routes')
-
 const app = express()
 const main = express()
 
 app.use(cors())
-app.use(routes)
+app.use(require('./routes'))
 
 app.use((req, res, next) => {
   const apiKey = req.get('API-Key')
